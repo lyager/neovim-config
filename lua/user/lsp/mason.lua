@@ -71,5 +71,5 @@ for _, server in pairs(malsp.get_installed_servers()) do
     end
 
     -- printTable(lspconfig)
-    lspconfig[server].setup(opts)
+    vim.lsp.config[server] = opts
 end

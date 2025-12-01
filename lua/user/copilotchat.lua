@@ -10,5 +10,5 @@ copilot_chat.setup({
     debug = false,
     trace = false,
     selection = select.unnamed,
-    model = 'claude-sonnet-4.5'
+    model = 'claude-opus-4.5'
 })

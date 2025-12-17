@@ -1,26 +1,11 @@
+-- Load options and keymaps first
 require("user.options")
 require("user.keymaps")
-require("user.plugins")
-require("user.luasnip")
+
+-- Bootstrap and load Lazy.nvim with all plugins
+require("user.lazy")
+
+-- Load colorscheme and autocommands
 require("user.colorscheme")
-require("user.cmp")
-require("user.lsp")
-require("user.telescope")
-require("user.gitsigns")
-require("user.treesitter")
---require("user.autopairs")
-require("user.comment")
-require("user.gitsigns")
-require("user.bufferline")
-require("user.lualine")
-require("user.project")
-require("user.impatient")
-require("user.indentline")
-require("user.alpha")
-require("user.whichkey")
 require("user.autocommands")
-require("user.neogen")
-require("user.copilot")
-require("user.copilotchat")
-require("user.outline")
 --require("user.theme-toggle-nvim")

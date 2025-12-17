@@ -6,7 +6,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     if vim.v.shell_error ~= 0 then
         vim.api.nvim_echo({
             { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-            { out, "WarningMsg" },
+            { out,                            "WarningMsg" },
             { "\nPress any key to exit..." },
         }, true, {})
         vim.fn.getchar()
@@ -19,18 +19,18 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
     -- Core plugins
     { "nvim-lua/plenary.nvim" },
-    
+
     -- Autopairs
-    { 
+    {
         "windwp/nvim-autopairs",
         event = "InsertEnter",
         config = function()
             require("nvim-autopairs").setup()
         end,
     },
-    
+
     -- Comments
-    { 
+    {
         "numToStr/Comment.nvim",
         event = { "BufReadPost", "BufNewFile" },
         dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
@@ -39,10 +39,10 @@ require("lazy").setup({
         end,
     },
     { "JoosepAlviste/nvim-ts-context-commentstring", lazy = true },
-    
+
     -- Icons and UI
-    { "kyazdani42/nvim-web-devicons", lazy = true },
-    { 
+    { "kyazdani42/nvim-web-devicons",                lazy = true },
+    {
         "kyazdani42/nvim-tree.lua",
         cmd = { "NvimTreeToggle", "NvimTreeFocus" },
         keys = {
@@ -52,9 +52,9 @@ require("lazy").setup({
             require("user.nvim-tree")
         end,
     },
-    
+
     -- Bufferline
-    { 
+    {
         "akinsho/bufferline.nvim",
         event = "VeryLazy",
         dependencies = { "kyazdani42/nvim-web-devicons" },
@@ -62,12 +62,12 @@ require("lazy").setup({
             require("user.bufferline")
         end,
     },
-    
+
     -- Bbye
-    { "moll/vim-bbye", cmd = { "Bdelete", "Bwipeout" } },
-    
+    { "moll/vim-bbye",                   cmd = { "Bdelete", "Bwipeout" } },
+
     -- Lualine
-    { 
+    {
         "nvim-lualine/lualine.nvim",
         event = "VeryLazy",
         dependencies = { "kyazdani42/nvim-web-devicons" },
@@ -75,9 +75,9 @@ require("lazy").setup({
             require("user.lualine")
         end,
     },
-    
+
     -- Terminal
-    { 
+    {
         "akinsho/toggleterm.nvim",
         cmd = { "ToggleTerm", "TermExec" },
         keys = {
@@ -87,26 +87,26 @@ require("lazy").setup({
             require("user.toggleterm")
         end,
     },
-    
+
     -- Project
-    { 
+    {
         "ahmedkhalf/project.nvim",
         event = "VeryLazy",
         config = function()
             require("user.project")
         end,
     },
-    
+
     -- Impatient
-    { 
+    {
         "lewis6991/impatient.nvim",
         config = function()
             require("user.impatient")
         end,
     },
-    
+
     -- Indent guides
-    { 
+    {
         "lukas-reineke/indent-blankline.nvim",
         event = { "BufReadPost", "BufNewFile" },
         main = "ibl",
@@ -114,18 +114,18 @@ require("lazy").setup({
             require("user.indentline")
         end,
     },
-    
+
     -- Alpha (dashboard)
-    { 
+    {
         "goolord/alpha-nvim",
         event = "VimEnter",
         config = function()
             require("user.alpha")
         end,
     },
-    
+
     -- Which-key
-    { 
+    {
         "folke/which-key.nvim",
         event = "VeryLazy",
         config = function()
@@ -134,7 +134,7 @@ require("lazy").setup({
     },
 
     -- Copilot
-    { 
+    {
         "zbirenbaum/copilot.lua",
         cmd = "Copilot",
         event = "InsertEnter",
@@ -142,7 +142,7 @@ require("lazy").setup({
             require("user.copilot")
         end,
     },
-    { 
+    {
         "zbirenbaum/copilot-cmp",
         dependencies = { "copilot.lua" },
         config = function()
@@ -161,15 +161,15 @@ require("lazy").setup({
 
     -- Colorschemes
     { "SyedFasiuddin/theme-toggle-nvim", lazy = true },
-    { "folke/tokyonight.nvim", lazy = true },
-    { "lunarvim/darkplus.nvim", lazy = true },
-    { "lifepillar/vim-solarized8", lazy = true },
-    { "catppuccin/vim", name = "catppuccin", lazy = true },
-    { "decaycs/decay.nvim", name = "decay", lazy = true },
-    { "navarasu/onedark.nvim", name = "onedark", lazy = true },
+    { "folke/tokyonight.nvim",           lazy = true },
+    { "lunarvim/darkplus.nvim",          lazy = true },
+    { "lifepillar/vim-solarized8",       lazy = true },
+    { "catppuccin/vim",                  name = "catppuccin",            lazy = true },
+    { "decaycs/decay.nvim",              name = "decay",                 lazy = true },
+    { "navarasu/onedark.nvim",           name = "onedark",               lazy = true },
 
     -- Completion
-    { 
+    {
         "hrsh7th/nvim-cmp",
         event = "InsertEnter",
         dependencies = {
@@ -185,14 +185,14 @@ require("lazy").setup({
             require("user.cmp")
         end,
     },
-    { "hrsh7th/cmp-buffer", lazy = true },
-    { "hrsh7th/cmp-path", lazy = true },
+    { "hrsh7th/cmp-buffer",       lazy = true },
+    { "hrsh7th/cmp-path",         lazy = true },
     { "saadparwaiz1/cmp_luasnip", lazy = true },
-    { "hrsh7th/cmp-nvim-lsp", lazy = true },
-    { "hrsh7th/cmp-nvim-lua", lazy = true },
+    { "hrsh7th/cmp-nvim-lsp",     lazy = true },
+    { "hrsh7th/cmp-nvim-lua",     lazy = true },
 
     -- Snippets
-    { 
+    {
         "L3MON4D3/LuaSnip",
         lazy = true,
         dependencies = { "rafamadriz/friendly-snippets" },
@@ -200,10 +200,10 @@ require("lazy").setup({
             require("user.luasnip")
         end,
     },
-    { "rafamadriz/friendly-snippets", lazy = true },
-    
+    { "rafamadriz/friendly-snippets",   lazy = true },
+
     -- Neogen (annotations)
-    { 
+    {
         "danymat/neogen",
         cmd = "Neogen",
         config = function()
@@ -212,11 +212,11 @@ require("lazy").setup({
     },
 
     -- LSP
-    { 
+    {
         "neovim/nvim-lspconfig",
         event = { "BufReadPre", "BufNewFile" },
         dependencies = {
-            { "mason-org/mason.nvim", tag = "v2.0.0" },
+            { "mason-org/mason.nvim",           tag = "v2.0.0" },
             { "mason-org/mason-lspconfig.nvim", tag = "v2.0.0" },
             { "nvimtools/none-ls.nvim" },
         },
@@ -224,26 +224,26 @@ require("lazy").setup({
             require("user.lsp")
         end,
     },
-    { 
+    {
         "mason-org/mason.nvim",
         tag = "v2.0.0",
         cmd = { "Mason", "MasonInstall", "MasonUninstall", "MasonUpdate" },
     },
     { "mason-org/mason-lspconfig.nvim", tag = "v2.0.0", lazy = true },
-    { "nvimtools/none-ls.nvim", lazy = true },
+    { "nvimtools/none-ls.nvim",         lazy = true },
 
     -- Telescope
-    { 
+    {
         "nvim-telescope/telescope.nvim",
         tag = "0.1.8",
         cmd = "Telescope",
         keys = {
-            { "<leader>f", desc = "Telescope" },
+            { "<leader>f",  desc = "Telescope" },
             { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
-            { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep" },
-            { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
+            { "<leader>fg", "<cmd>Telescope live_grep<cr>",  desc = "Live Grep" },
+            { "<leader>fb", "<cmd>Telescope buffers<cr>",    desc = "Buffers" },
         },
-        dependencies = { 
+        dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter",
         },
@@ -253,7 +253,7 @@ require("lazy").setup({
     },
 
     -- Outline
-    { 
+    {
         "hedyhli/outline.nvim",
         cmd = { "Outline", "OutlineOpen" },
         keys = {
@@ -265,7 +265,7 @@ require("lazy").setup({
     },
 
     -- Treesitter
-    { 
+    {
         "nvim-treesitter/nvim-treesitter",
         event = { "BufReadPost", "BufNewFile" },
         build = ":TSUpdate",
@@ -275,11 +275,11 @@ require("lazy").setup({
     },
 
     -- FZF
-    { "junegunn/fzf", build = "./install --all" },
+    { "junegunn/fzf",     build = "./install --all" },
     { "junegunn/fzf.vim", dependencies = { "junegunn/fzf" } },
 
     -- Git
-    { 
+    {
         "lewis6991/gitsigns.nvim",
         event = { "BufReadPre", "BufNewFile" },
         config = function()
@@ -298,7 +298,7 @@ require("lazy").setup({
             auto_suggestions_provider = "copilot",
             providers = {
                 copilot = {
-                    model = "claude-sonnet-4",
+                    model = "claude-opus-4.5",
                 },
             },
         },

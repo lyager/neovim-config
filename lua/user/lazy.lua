@@ -275,8 +275,8 @@ require("lazy").setup({
     },
 
     -- FZF
-    { "junegunn/fzf",     build = "./install --all" },
-    { "junegunn/fzf.vim", dependencies = { "junegunn/fzf" } },
+    { "junegunn/fzf",     build = "./install --all",         version = "*" },
+    { "junegunn/fzf.vim", dependencies = { "junegunn/fzf" }, version = "*" },
 
     -- Git
     {

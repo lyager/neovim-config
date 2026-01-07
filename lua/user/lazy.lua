@@ -286,7 +286,7 @@ require("lazy").setup({
             require("user.gitsigns")
         end,
     },
-    { "tpope/vim-fugitive", cmd = { "Git", "G", "Gdiffsplit", "Gvdiffsplit" } },
+    { "tpope/vim-fugitive", cmd = { "Git", "G", "Gdiffsplit", "Gvdiffsplit", "Gw", "Gwrite" } },
 
     -- Avante.nvim - AI-powered code assistant
     {

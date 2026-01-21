@@ -426,6 +426,55 @@ local mappings = {
         nowait = true,
         remap = false,
     },
+    -- OpenCode Group
+    {
+        "<leader>O",
+        group = "OpenCode",
+        nowait = true,
+        remap = false,
+    },
+    {
+        "<leader>Oa",
+        desc = "OpenCode: Ask",
+        nowait = true,
+        remap = false,
+    },
+    {
+        "<leader>Os",
+        desc = "OpenCode: Select action",
+        nowait = true,
+        remap = false,
+    },
+    {
+        "<leader>Ot",
+        desc = "OpenCode: Toggle",
+        nowait = true,
+        remap = false,
+    },
+    {
+        "<leader>Op",
+        desc = "OpenCode: Prompt",
+        nowait = true,
+        remap = false,
+    },
+    {
+        "<leader>Oc",
+        desc = "OpenCode: Compact session",
+        nowait = true,
+        remap = false,
+    },
+    {
+        "<leader>On",
+        desc = "OpenCode: New session",
+        nowait = true,
+        remap = false,
+    },
+    {
+        "<leader>Oi",
+        desc = "OpenCode: Interrupt",
+        nowait = true,
+        remap = false,
+    },
     {
         "<leader>p",
         group = "Packer",

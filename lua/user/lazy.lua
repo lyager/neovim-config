@@ -270,7 +270,7 @@ require("lazy").setup({
         "hedyhli/outline.nvim",
         cmd = { "Outline", "OutlineOpen" },
         keys = {
-            { "<leader>o", "<cmd>Outline<cr>", desc = "Toggle Outline" },
+            { "<leader>lo", "<cmd>Outline<cr>", desc = "Toggle Outline" },
         },
         config = function()
             require("user.outline")
@@ -314,14 +314,14 @@ require("lazy").setup({
             -- Required for opts.events.reload
             vim.o.autoread = true
 
-            -- Keymaps using <leader>O prefix for OpenCode
-            vim.keymap.set({ "n", "x" }, "<leader>Oa", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "OpenCode: Ask" })
-            vim.keymap.set({ "n", "x" }, "<leader>Os", function() require("opencode").select() end, { desc = "OpenCode: Select action" })
-            vim.keymap.set({ "n", "t" }, "<leader>Ot", function() require("opencode").toggle() end, { desc = "OpenCode: Toggle" })
-            vim.keymap.set({ "n", "x" }, "<leader>Op", function() require("opencode").prompt() end, { desc = "OpenCode: Prompt" })
-            vim.keymap.set("n", "<leader>Oc", function() require("opencode").command("session.compact") end, { desc = "OpenCode: Compact session" })
-            vim.keymap.set("n", "<leader>On", function() require("opencode").command("session.new") end, { desc = "OpenCode: New session" })
-            vim.keymap.set("n", "<leader>Oi", function() require("opencode").command("session.interrupt") end, { desc = "OpenCode: Interrupt" })
+            -- Keymaps using <leader>o prefix for OpenCode
+            vim.keymap.set({ "n", "x" }, "<leader>oa", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "OpenCode: Ask" })
+            vim.keymap.set({ "n", "x" }, "<leader>os", function() require("opencode").select() end, { desc = "OpenCode: Select action" })
+            vim.keymap.set({ "n", "t" }, "<leader>ot", function() require("opencode").toggle() end, { desc = "OpenCode: Toggle" })
+            vim.keymap.set({ "n", "x" }, "<leader>op", function() require("opencode").prompt() end, { desc = "OpenCode: Prompt" })
+            vim.keymap.set("n", "<leader>oc", function() require("opencode").command("session.compact") end, { desc = "OpenCode: Compact session" })
+            vim.keymap.set("n", "<leader>on", function() require("opencode").command("session.new") end, { desc = "OpenCode: New session" })
+            vim.keymap.set("n", "<leader>oi", function() require("opencode").command("session.interrupt") end, { desc = "OpenCode: Interrupt" })
         end,
     },
 

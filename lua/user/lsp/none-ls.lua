@@ -1,10 +1,12 @@
-local none_ls_status_ok, non_ls = pcall(require, "none-ls")
+local none_ls_status_ok, none_ls = pcall(require, "none-ls")
 if not none_ls_status_ok then
 	return
 end
 
 local formatting = none_ls.builtins.formatting
 local diagnostics = none_ls.builtins.diagnostics
+
+local augroup = vim.api.nvim_create_augroup("NullLsFormatting", { clear = true })
 
 none_ls.setup({
 	debug = false,
@@ -23,10 +25,10 @@ none_ls.setup({
 			vim.api.nvim_create_autocmd("BufWritePre", {
 				group = augroup,
 				buffer = bufnr,
-				callback = function()
-					-- on 0.8, you should use vim.lsp.buf.format({ bufnr = bufnr }) instead
-					-- on later neovim version, you should use vim.lsp.buf.format({ async = false }) instead
-					--vim.lsp.buf.formatting_sync()
+				callback = function(args)
+					if vim.g.disable_autoformat or vim.b[args.buf].disable_autoformat then
+						return
+					end
 					vim.lsp.buf.format({ bufnr = bufnr })
 				end,
 			})

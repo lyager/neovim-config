@@ -330,6 +330,7 @@ require("lazy").setup({
         "yetone/avante.nvim",
         event = "VeryLazy",
         build = "make",
+        enabled = false,
         opts = {
             provider = "copilot",
             auto_suggestions_provider = "copilot",

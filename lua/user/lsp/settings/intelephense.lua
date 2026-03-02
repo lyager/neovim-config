@@ -1,9 +1,9 @@
 return {
-    settings = {
-      intelephense = {
-        files = {
-            exclude = { "**/cache/**" }
-        },
-      },
-    },
+	settings = {
+		intelephense = {
+			files = {
+				exclude = { "**/cache/**" },
+			},
+		},
+	},
 }

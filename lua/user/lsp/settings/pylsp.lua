@@ -1,7 +1,7 @@
-local lspconfig = require 'lspconfig'
+local lspconfig = require("lspconfig")
 
-local root_dir = lspconfig.util.root_pattern('.git')
+local root_dir = lspconfig.util.root_pattern(".git")
 
 return {
-    root_dir = root_dir
+	root_dir = root_dir,
 }

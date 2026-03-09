@@ -37,35 +37,22 @@ M.setup = function()
 	vim.diagnostic.config(config)
 end
 
+-- Only keymaps that have no Neovim 0.11+ default equivalent.
+-- See :help lsp-defaults for the full list of built-in LSP mappings:
+--   K (hover), <C-]> (definition), grr (references), gri (implementation),
+--   grt (type definition), grn (rename), gra (code action), gO (symbols),
+--   <C-S> (signature help), ]d/[d (diagnostics), <C-W>d (diagnostic float),
+--   gq (format via formatexpr)
 local function lsp_keymaps(bufnr)
-	-- local opts = { noremap = true, silent = true, buffer = bufnr }
 	local opts = { silent = true }
 	local function opt(desc, others)
 		return vim.tbl_extend("force", opts, { desc = desc }, others or {})
 	end
 	local keymap = vim.keymap.set
 	keymap("n", "gD", vim.lsp.buf.declaration, opt("Goto declaration"))
-	-- keymap("n", "gd", function() vim.lsp.buf.definition() end, opt("Goto definition"))
-	keymap("n", "gd", vim.lsp.buf.definition, opt("Goto definition"))
-	keymap("n", "K", vim.lsp.buf.hover, opts)
-	keymap("n", "gI", vim.lsp.buf.implementation, opts)
-	-- keymap("n", "gr", vim.lsp.buf.references, opt("Goto references"))
-	keymap("n", "gl", vim.diagnostic.open_float, opts)
-	keymap("n", "<leader>lf", function()
-		vim.lsp.buf.format({ async = true })
-	end, opts)
-	keymap("n", "<leader>li", "<cmd>LspInfo<cr>", opts)
-	keymap("n", "<leader>lI", "<cmd>LspInstallInfo<cr>", opts)
-	keymap("n", "<leader>la", vim.lsp.buf.code_action, opts)
-	keymap("n", "<leader>lj", function()
-		vim.diagnostic.jump({ count = 1, buffer = 0 })
-	end, opts)
-	keymap("n", "<leader>lk", function()
-		vim.diagnostic.jump({ count = -1, buffer = 0 })
-	end, opts)
-	keymap("n", "<leader>lr", vim.lsp.buf.rename, opts)
-	keymap("n", "<leader>ls", vim.lsp.buf.signature_help, opts)
-	keymap("n", "<leader>lq", vim.diagnostic.setloclist, opts)
+	keymap("n", "<leader>li", "<cmd>LspInfo<cr>", opt("LSP Info"))
+	keymap("n", "<leader>lI", "<cmd>LspInstallInfo<cr>", opt("Installer Info"))
+	keymap("n", "<leader>lq", vim.diagnostic.setloclist, opt("Quickfix"))
 end
 
 M.on_attach = function(client, bufnr)

@@ -364,6 +364,13 @@ local mappings = {
 		remap = false,
 	},
 	{
+		"<leader>lF",
+		"<cmd>RustFeatures<cr>",
+		desc = "Cargo Features",
+		nowait = true,
+		remap = false,
+	},
+	{
 		"<leader>li",
 		"<cmd>LspInfo<cr>",
 		desc = "Info",

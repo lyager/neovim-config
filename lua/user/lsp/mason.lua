@@ -56,20 +56,26 @@ function printTable(t, indent)
 	end
 end
 
--- The interfaces to servers are controlled by nvim-lspconfig (path: .local/share/nvim/site/pack/packer/start/nvim-lspconfig)
+-- Servers managed by dedicated plugins (not lspconfig)
+local skip_servers = { rust_analyzer = true }
+
+-- The interfaces to servers are controlled by nvim-lspconfig
 for _, server in pairs(malsp.get_installed_servers()) do
+	if skip_servers[server] then
+		goto continue
+	end
+
 	opts = {
 		on_attach = require("user.lsp.handlers").on_attach,
 		capabilities = require("user.lsp.handlers").capabilities,
 	}
-
-	-- server = vim.split(server, "@")[1]
 
 	local require_ok, conf_opts = pcall(require, "user.lsp.settings." .. server)
 	if require_ok then
 		opts = vim.tbl_deep_extend("force", conf_opts, opts)
 	end
 
-	-- printTable(lspconfig)
 	vim.lsp.config[server] = opts
+
+	::continue::
 end

@@ -232,6 +232,41 @@ require("lazy").setup({
 	{ "mason-org/mason-lspconfig.nvim", tag = "v2.0.0", lazy = true },
 	{ "nvimtools/none-ls.nvim", lazy = true },
 
+	-- Rust
+	{
+		"mrcjkb/rustaceanvim",
+		version = "^8",
+		lazy = false,
+		init = function()
+			vim.g.rustaceanvim = function()
+				return {
+					server = {
+						on_attach = function(client, bufnr)
+							require("user.lsp.handlers").on_attach(client, bufnr)
+						end,
+						capabilities = require("user.lsp.handlers").capabilities,
+						default_settings = {
+							["rust-analyzer"] = {
+								checkOnSave = true,
+								check = {
+									command = "clippy",
+									features = {},
+								},
+								cargo = {
+									features = {},
+								},
+							},
+						},
+					},
+				}
+			end
+
+			vim.api.nvim_create_user_command("RustFeatures", function()
+				require("user.rust_features").pick()
+			end, { desc = "Toggle Cargo features for rust-analyzer" })
+		end,
+	},
+
 	-- Oil
 	{
 		"stevearc/oil.nvim",

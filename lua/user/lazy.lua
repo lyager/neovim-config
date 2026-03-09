@@ -250,10 +250,10 @@ require("lazy").setup({
 								checkOnSave = true,
 								check = {
 									command = "clippy",
-									features = {},
+									features = "all",
 								},
 								cargo = {
-									features = {},
+									features = "all",
 								},
 							},
 						},

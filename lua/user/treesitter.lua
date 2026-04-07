@@ -23,6 +23,41 @@ function M.config()
 			enable = true,
 			enable_autocmd = false,
 		},
+
+		textobjects = {
+			move = {
+				enable = true,
+				set_jumps = true,
+				goto_next_start = {
+					["]]"] = { query = "@function.outer", desc = "Next function start" },
+					["]c"] = { query = "@class.outer", desc = "Next class start" },
+				},
+				goto_next_end = {
+					["]["] = { query = "@function.outer", desc = "Next function end" },
+					["]C"] = { query = "@class.outer", desc = "Next class end" },
+				},
+				goto_previous_start = {
+					["[["] = { query = "@function.outer", desc = "Prev function start" },
+					["[c"] = { query = "@class.outer", desc = "Prev class start" },
+				},
+				goto_previous_end = {
+					["[]"] = { query = "@function.outer", desc = "Prev function end" },
+					["[C"] = { query = "@class.outer", desc = "Prev class end" },
+				},
+			},
+			select = {
+				enable = true,
+				lookahead = true,
+				keymaps = {
+					["af"] = { query = "@function.outer", desc = "around function" },
+					["if"] = { query = "@function.inner", desc = "inside function" },
+					["ac"] = { query = "@class.outer", desc = "around class" },
+					["ic"] = { query = "@class.inner", desc = "inside class" },
+					["aa"] = { query = "@parameter.outer", desc = "around argument" },
+					["ia"] = { query = "@parameter.inner", desc = "inside argument" },
+				},
+			},
+		},
 	})
 end
 

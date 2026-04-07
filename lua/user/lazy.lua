@@ -133,32 +133,6 @@ require("lazy").setup({
 		end,
 	},
 
-	-- Copilot
-	{
-		"zbirenbaum/copilot.lua",
-		cmd = "Copilot",
-		event = "InsertEnter",
-		config = function()
-			require("user.copilot")
-		end,
-	},
-	{
-		"zbirenbaum/copilot-cmp",
-		dependencies = { "copilot.lua" },
-		config = function()
-			require("copilot_cmp").setup()
-		end,
-	},
-	{
-		"CopilotC-Nvim/CopilotChat.nvim",
-		tag = "v4.7.4",
-		dependencies = { "zbirenbaum/copilot.lua", "nvim-lua/plenary.nvim" },
-		cmd = { "CopilotChat", "CopilotChatOpen", "CopilotChatToggle" },
-		config = function()
-			require("user.copilotchat")
-		end,
-	},
-
 	-- Colorschemes
 	{ "SyedFasiuddin/theme-toggle-nvim", lazy = true },
 	{ "folke/tokyonight.nvim", lazy = true },
@@ -317,6 +291,9 @@ require("lazy").setup({
 		"nvim-treesitter/nvim-treesitter",
 		event = { "BufReadPost", "BufNewFile" },
 		build = ":TSUpdate",
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter-textobjects",
+		},
 		config = function()
 			require("user.treesitter")
 		end,

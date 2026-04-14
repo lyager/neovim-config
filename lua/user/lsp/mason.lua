@@ -32,7 +32,9 @@ end
 
 malsp.setup({
 	ensure_installed = servers,
-	automatic_enable = true,
+	automatic_enable = {
+		exclude = { "rust_analyzer" }, -- managed by rustaceanvim
+	},
 })
 
 local lspconfig_status_ok, lspconfig = pcall(require, "lspconfig")

@@ -2,6 +2,8 @@ local M = {}
 
 --- Currently enabled features (module-local state)
 --- Can be a list of feature names, or the string "all" for --all-features.
+--- Defaults to empty (i.e. only Cargo's `default` feature set) so projects with
+--- platform-specific features don't force-compile incompatible crates.
 ---@type string[]|string
 M.enabled_features = {}
 
@@ -57,47 +59,49 @@ function M.find_cargo_toml()
 	return found[1]
 end
 
---- Apply the currently enabled features to the running rust-analyzer
-function M.apply_features()
+--- Apply the currently enabled features to the running rust-analyzer.
+--- @param bufnr number|nil A Rust buffer to restart in (needed because Telescope
+---   may have changed the current buffer by the time this runs).
+function M.apply_features(bufnr)
 	local clients = vim.lsp.get_clients({ name = "rust-analyzer" })
 	if #clients == 0 then
 		vim.notify("rust-analyzer is not running", vim.log.levels.WARN)
 		return
 	end
 
-	local client = clients[1]
+	-- Fall back to any buffer attached to the rust-analyzer client
+	if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then
+		bufnr = vim.lsp.get_buffers_by_client_id(clients[1].id)[1]
+	end
+
 	local features = M.enabled_features == "all" and "all" or vim.deepcopy(M.enabled_features)
 
-	client.settings = vim.tbl_deep_extend("force", client.settings or {}, {
-		["rust-analyzer"] = {
-			cargo = { features = features },
-			check = { features = features },
-		},
-	})
+	-- Mutate rustaceanvim's *cached* config directly — the module is loaded
+	-- once and returned by reference, so this is the single source of truth
+	-- for both the running client and any future restart.
+	local ra_config = require("rustaceanvim.config.internal")
+	local ra = ra_config.server.default_settings["rust-analyzer"]
+	ra.cargo = ra.cargo or {}
+	ra.cargo.features = features
+	ra.check = ra.check or {}
+	ra.check.features = features
 
-	client:notify("workspace/didChangeConfiguration", { settings = client.settings })
-
-	-- Persist to rustaceanvim config so restarts pick up current features
-	local g = vim.g.rustaceanvim
-	if type(g) == "table" then
-		g.server.default_settings["rust-analyzer"].cargo.features = features
-		g.server.default_settings["rust-analyzer"].check.features = features
-		vim.g.rustaceanvim = g -- must re-assign; vim.g is copy-on-read
-	end
-
-	if features == "all" then
-		vim.notify("Rust features: ALL", vim.log.levels.INFO)
-	elseif #features == 0 then
-		vim.notify("Rust features: (default only)", vim.log.levels.INFO)
-	else
-		vim.notify("Rust features: " .. table.concat(features, ", "), vim.log.levels.INFO)
-	end
+	local msg = features == "all" and "ALL"
+		or type(features) == "table" and #features == 0 and "(default only)"
+		or type(features) == "table" and table.concat(features, ", ")
+		or tostring(features)
+	-- Use rustaceanvim's own restart (stop → poll until stopped → start).
+	-- It reads from the cached config we mutated above.
+	require("rustaceanvim.lsp").restart(bufnr)
+	vim.notify("rust-analyzer restarting (features: " .. msg .. ") …", vim.log.levels.INFO)
 end
 
 local ALL_FEATURES = "(all)"
 
 --- Open a Telescope picker to toggle Cargo features
 function M.pick()
+	-- Capture the Rust buffer *before* Telescope opens its own buffer.
+	local rust_bufnr = vim.api.nvim_get_current_buf()
 	local cargo_toml = M.find_cargo_toml()
 	if not cargo_toml then
 		vim.notify("No Cargo.toml found", vim.log.levels.ERROR)
@@ -195,7 +199,7 @@ function M.pick()
 							end
 						end
 					end
-					M.apply_features()
+					M.apply_features(rust_bufnr)
 				end)
 
 				return true

@@ -212,32 +212,42 @@ require("lazy").setup({
 		version = "^8",
 		lazy = false,
 		init = function()
-			vim.g.rustaceanvim = function()
-				return {
-					server = {
-						on_attach = function(client, bufnr)
-							require("user.lsp.handlers").on_attach(client, bufnr)
-						end,
-						capabilities = require("user.lsp.handlers").capabilities,
-						default_settings = {
-							["rust-analyzer"] = {
-								checkOnSave = true,
-								check = {
-									command = "clippy",
-									features = "all",
-								},
-								cargo = {
-									features = "all",
-								},
+			vim.g.rustaceanvim = {
+				server = {
+					on_attach = function(client, bufnr)
+						require("user.lsp.handlers").on_attach(client, bufnr)
+					end,
+					capabilities = require("user.lsp.handlers").capabilities,
+					default_settings = {
+						["rust-analyzer"] = {
+							checkOnSave = true,
+							check = {
+								command = "clippy",
 							},
+							cargo = {},
 						},
 					},
-				}
-			end
+				},
+			}
 
 			vim.api.nvim_create_user_command("RustFeatures", function()
 				require("user.rust_features").pick()
 			end, { desc = "Toggle Cargo features for rust-analyzer" })
+
+			-- rust-analyzer reports workspace health (e.g. cargo metadata failed)
+			-- via this custom notification. Surface it as an error so feature /
+			-- toolchain incompatibilities aren't silently swallowed.
+			vim.lsp.handlers["experimental/serverStatus"] = function(_, result)
+				if result and result.health ~= "ok" then
+					local level = result.health == "error" and vim.log.levels.ERROR or vim.log.levels.WARN
+					vim.notify(
+						"rust-analyzer: " .. (result.message or ("health=" .. tostring(result.health))),
+						level,
+						{ title = "rust-analyzer" }
+					)
+				end
+			end
+
 		end,
 	},
 

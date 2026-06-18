@@ -216,6 +216,14 @@ require("lazy").setup({
 				server = {
 					on_attach = function(client, bufnr)
 						require("user.lsp.handlers").on_attach(client, bufnr)
+						-- Apply any features recorded by a project-local .nvim.lua
+						-- (via require("user.rust_features").set(...)). Stay silent
+						-- when nothing was selected so plain projects are untouched.
+						local rf = require("user.rust_features")
+						local sel = rf.enabled_features
+						if sel == "all" or (type(sel) == "table" and #sel > 0) then
+							rf.apply_features()
+						end
 					end,
 					capabilities = require("user.lsp.handlers").capabilities,
 					default_settings = {

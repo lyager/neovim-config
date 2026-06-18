@@ -40,15 +40,12 @@ function M.parse_cargo_features(path)
 	return features
 end
 
---- Find the workspace root Cargo.toml
+--- Resolve the workspace root directory (the dir containing the root Cargo.toml).
 ---@return string|nil
-function M.find_cargo_toml()
+function M.workspace_root()
 	local clients = vim.lsp.get_clients({ name = "rust-analyzer" })
 	if #clients > 0 and clients[1].config.root_dir then
-		local path = clients[1].config.root_dir .. "/Cargo.toml"
-		if vim.fn.filereadable(path) == 1 then
-			return path
-		end
+		return clients[1].config.root_dir
 	end
 
 	-- Fallback: search upward from current file
@@ -56,7 +53,23 @@ function M.find_cargo_toml()
 		upward = true,
 		path = vim.fn.expand("%:p:h"),
 	})
-	return found[1]
+	if found[1] then
+		return vim.fs.dirname(found[1])
+	end
+	return nil
+end
+
+--- Find the workspace root Cargo.toml
+---@return string|nil
+function M.find_cargo_toml()
+	local root = M.workspace_root()
+	if root then
+		local path = root .. "/Cargo.toml"
+		if vim.fn.filereadable(path) == 1 then
+			return path
+		end
+	end
+	return nil
 end
 
 --- Apply the currently enabled features to the running rust-analyzer
@@ -86,6 +99,93 @@ function M.apply_features()
 	else
 		vim.notify("Rust features: " .. table.concat(features, ", "), vim.log.levels.INFO)
 	end
+end
+
+--- Set the enabled features (entry point for project-local .nvim.lua).
+--- Accepts a list of feature names or the string "all". Applies immediately
+--- if rust-analyzer is already attached (e.g. when re-sourcing the file).
+---@param features string[]|string
+function M.set(features)
+	if features ~= "all" and type(features) ~= "table" then
+		vim.notify("rust_features.set: expected a list or \"all\"", vim.log.levels.ERROR)
+		return
+	end
+	M.enabled_features = features == "all" and "all" or vim.deepcopy(features)
+
+	if #vim.lsp.get_clients({ name = "rust-analyzer" }) > 0 then
+		M.apply_features()
+	end
+end
+
+local BLOCK_BEGIN = "-- >>> rust_features (managed by RustFeatures) >>>"
+local BLOCK_END = "-- <<< rust_features <<<"
+
+--- Render the current selection as a Lua argument literal for M.set().
+---@return string
+local function render_arg()
+	if M.enabled_features == "all" then
+		return '"all"'
+	end
+	local quoted = {}
+	for _, feat in ipairs(M.enabled_features) do
+		table.insert(quoted, string.format("%q", feat))
+	end
+	return "{ " .. table.concat(quoted, ", ") .. " }"
+end
+
+--- Persist the current selection into a managed block in <root>/.nvim.lua,
+--- preserving any other content, and trust the file so exrc won't re-prompt.
+function M.save()
+	local root = M.workspace_root()
+	if not root then
+		vim.notify("Cannot save Rust features: no workspace root", vim.log.levels.WARN)
+		return
+	end
+
+	local path = root .. "/.nvim.lua"
+	local block = {
+		BLOCK_BEGIN,
+		'require("user.rust_features").set(' .. render_arg() .. ")",
+		BLOCK_END,
+	}
+
+	local lines = {}
+	if vim.fn.filereadable(path) == 1 then
+		lines = vim.fn.readfile(path)
+	end
+
+	-- Locate an existing managed block and replace it; otherwise append.
+	local begin_idx, end_idx
+	for i, line in ipairs(lines) do
+		if line == BLOCK_BEGIN then
+			begin_idx = i
+		elseif line == BLOCK_END and begin_idx then
+			end_idx = i
+			break
+		end
+	end
+
+	local out = {}
+	if begin_idx and end_idx then
+		for i = 1, begin_idx - 1 do
+			table.insert(out, lines[i])
+		end
+		vim.list_extend(out, block)
+		for i = end_idx + 1, #lines do
+			table.insert(out, lines[i])
+		end
+	else
+		out = lines
+		if #out > 0 and out[#out] ~= "" then
+			table.insert(out, "")
+		end
+		vim.list_extend(out, block)
+	end
+
+	vim.fn.writefile(out, path)
+
+	-- Trust the file so exrc loads it without prompting on next startup.
+	pcall(vim.secure.trust, { action = "allow", path = vim.fn.fnamemodify(path, ":p") })
 end
 
 local ALL_FEATURES = "(all)"
@@ -190,6 +290,7 @@ function M.pick()
 						end
 					end
 					M.apply_features()
+					M.save()
 				end)
 
 				return true

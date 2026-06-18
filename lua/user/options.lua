@@ -39,6 +39,7 @@ local options = {
 	foldmethod = "expr", -- Set default foldmethod
 	foldexpr = "nvim_treesitter#foldexpr()",
 	foldlevel = 99, -- - foldlevel default: open
+	exrc = true, -- load project-local .nvim.lua from the cwd (trust-gated via vim.secure)
 }
 
 for k, v in pairs(options) do

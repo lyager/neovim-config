@@ -115,13 +115,6 @@ local mappings = {
 		remap = false,
 	},
 	{
-		"<leader>-",
-		"<cmd>Oil<cr>",
-		desc = "Oil File Explorer",
-		nowait = true,
-		remap = false,
-	},
-	{
 		"<leader>f",
 		"<cmd>lua require('telescope.builtin').find_files(require('telescope.themes'))<cr>",
 		desc = "Find files",

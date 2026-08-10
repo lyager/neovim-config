@@ -171,14 +171,14 @@ local mappings = {
 	},
 	{
 		"<leader>gj",
-		"<cmd>lua require 'gitsigns'.next_hunk()<cr>",
+		"<cmd>lua require 'gitsigns'.nav_hunk('next')<cr>",
 		desc = "Next Hunk",
 		nowait = true,
 		remap = false,
 	},
 	{
 		"<leader>gk",
-		"<cmd>lua require 'gitsigns'.prev_hunk()<cr>",
+		"<cmd>lua require 'gitsigns'.nav_hunk('prev')<cr>",
 		desc = "Prev Hunk",
 		nowait = true,
 		remap = false,

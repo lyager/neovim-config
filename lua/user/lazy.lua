@@ -212,31 +212,56 @@ require("lazy").setup({
 		version = "^8",
 		lazy = false,
 		init = function()
-			vim.g.rustaceanvim = {
-				server = {
-					on_attach = function(client, bufnr)
-						require("user.lsp.handlers").on_attach(client, bufnr)
-						-- Apply any features recorded by a project-local .nvim.lua
-						-- (via require("user.rust_features").set(...)). Stay silent
-						-- when nothing was selected so plain projects are untouched.
-						local rf = require("user.rust_features")
-						local sel = rf.enabled_features
-						if sel == "all" or (type(sel) == "table" and #sel > 0) then
-							rf.apply_features()
-						end
-					end,
-					capabilities = require("user.lsp.handlers").capabilities,
-					default_settings = {
-						["rust-analyzer"] = {
-							checkOnSave = true,
-							check = {
-								command = "clippy",
+			local function find_cross_toml(dir)
+				return vim.fs.find("Cross.toml", { upward = true, path = dir })[1]
+			end
+
+			-- Evaluated by rustaceanvim when the first Rust buffer loads, so
+			-- Cross.toml detection for cargo_override runs from that buffer's
+			-- directory. Note: evaluated once per session; the per-project
+			-- server.settings function below handles the LSP check command.
+			vim.g.rustaceanvim = function()
+				local has_cross = find_cross_toml(vim.fn.expand("%:p:h")) ~= nil
+				return {
+					tools = has_cross and { cargo_override = "cross" } or nil,
+					server = {
+						on_attach = function(client, bufnr)
+							require("user.lsp.handlers").on_attach(client, bufnr)
+							-- Apply any features recorded by a project-local .nvim.lua
+							-- (via require("user.rust_features").set(...)). Stay silent
+							-- when nothing was selected so plain projects are untouched.
+							local rf = require("user.rust_features")
+							local sel = rf.enabled_features
+							if sel == "all" or (type(sel) == "table" and #sel > 0) then
+								rf.apply_features()
+							end
+						end,
+						capabilities = require("user.lsp.handlers").capabilities,
+						default_settings = {
+							["rust-analyzer"] = {
+								checkOnSave = true,
+								check = {
+									command = "clippy",
+								},
+								cargo = {},
 							},
-							cargo = {},
 						},
+						settings = function(project_root, default_settings)
+							local settings = vim.deepcopy(default_settings)
+							if project_root and vim.uv.fs_stat(vim.fs.joinpath(project_root, "Cross.toml")) then
+								settings["rust-analyzer"].check.overrideCommand = {
+									"cross",
+									"clippy",
+									"--workspace",
+									"--all-targets",
+									"--message-format=json",
+								}
+							end
+							return settings
+						end,
 					},
-				},
-			}
+				}
+			end
 
 			vim.api.nvim_create_user_command("RustFeatures", function()
 				require("user.rust_features").pick()

@@ -76,18 +76,6 @@ require("lazy").setup({
 		end,
 	},
 
-	-- Terminal
-	{
-		"akinsho/toggleterm.nvim",
-		cmd = { "ToggleTerm", "TermExec" },
-		keys = {
-			{ "<C-\\>", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
-		},
-		config = function()
-			require("user.toggleterm")
-		end,
-	},
-
 	-- Project
 	{
 		"ahmedkhalf/project.nvim",

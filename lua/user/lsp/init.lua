@@ -1,7 +1,7 @@
 ---@diagnostic disable: undefined-global
 local status_ok, _ = pcall(require, "lspconfig")
 if not status_ok then
-	return
+    return
 end
 
 vim.lsp.log.set_level("warn")

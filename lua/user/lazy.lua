@@ -279,12 +279,13 @@ require("lazy").setup({
         keys = {
             { "<leader>f",  desc = "Telescope" },
             { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
-            { "<leader>fg", "<cmd>Telescope live_grep<cr>",  desc = "Live Grep" },
+            { "<leader>fg", "<cmd>Telescope egrepify<cr>",   desc = "Live Grep" },
             { "<leader>fb", "<cmd>Telescope buffers<cr>",    desc = "Buffers" },
         },
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter",
+            "fdschmidt93/telescope-egrepify.nvim",
         },
         config = function()
             require("user.telescope")

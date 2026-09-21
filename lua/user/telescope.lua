@@ -94,10 +94,19 @@ telescope.setup({
         },
     },
     extensions = {
-        -- Your extension configuration goes here:
-        -- extension_name = {
-        --   extension_config_key = value,
-        -- }
-        -- please take a look at the readme of the extension you want to configure
+        egrepify = {
+            -- Built-in prefixes: `#lua,md` file suffixes, `>dir` folder names,
+            -- `&name` file names. Added here: `!md,txt` excludes file suffixes.
+            prefixes = {
+                ["!"] = {
+                    flag = "glob",
+                    cb = function(input)
+                        return string.format([[!*.{%s}]], input)
+                    end,
+                },
+            },
+        },
     },
 })
+
+telescope.load_extension("egrepify")

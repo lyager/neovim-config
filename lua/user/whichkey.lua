@@ -81,7 +81,7 @@ local opts = {
 local mappings = {
     {
         "<leader>F",
-        "<cmd>Telescope live_grep theme=ivy<cr>",
+        "<cmd>Telescope egrepify theme=ivy<cr>",
         desc = "Find Text",
         nowait = true,
         remap = false,

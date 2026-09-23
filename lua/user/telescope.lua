@@ -106,7 +106,13 @@ telescope.setup({
                 },
             },
         },
+        file_browser = {
+            hijack_netrw = true,
+            grouped = true,
+            hidden = { file_browser = true, folder_browser = true },
+        },
     },
 })
 
 telescope.load_extension("egrepify")
+telescope.load_extension("file_browser")

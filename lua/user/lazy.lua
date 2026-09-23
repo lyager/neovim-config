@@ -272,7 +272,7 @@ require("lazy").setup({
         cmd = "Telescope",
         keys = {
             { "<leader>f",  "<cmd>Telescope find_files<cr>",                                  desc = "Find Files" },
-            { "<leader>ff", "<cmd>Telescope find_files<cr>",                                  desc = "Find Files" },
+            { "<leader>ff", "<cmd>Telescope file_browser path=%:p:h select_buffer=true<cr>", desc = "File Browser" },
             { "<leader>fg", "<cmd>Telescope egrepify<cr>",                                    desc = "Live Grep" },
             { "<leader>fb", "<cmd>Telescope buffers<cr>",                                     desc = "Buffers" },
             { "<leader>F",  "<cmd>Telescope egrepify theme=ivy<cr>",                          desc = "Find Text" },
@@ -301,6 +301,7 @@ require("lazy").setup({
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter",
             "fdschmidt93/telescope-egrepify.nvim",
+            "nvim-telescope/telescope-file-browser.nvim",
         },
         config = function()
             require("user.telescope")

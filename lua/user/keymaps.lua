@@ -61,12 +61,11 @@ keymap("x", "K", ":m '<-2<CR>gv=gv", opts)
 keymap("x", "<A-j>", ":m '>+1<CR>gv=gv", opts)
 keymap("x", "<A-k>", ":m '<-2<CR>gv=gv", opts)
 
---- FZF
---keymap("", "<leader>f", ":Files<CR>", opts)
---keymap("", "<leader>FH", ":History<CR>", opts)
---keymap("", "<leader>FB", ":Buffers<CR>", opts)
---keymap("", "<leader>FG", ":Rg<CR>", opts)
---keymap("", "<leader>gg", ":Rg <c-r><c-w><CR>", opts)
+-- Leader --
+keymap("n", "<leader>w", "<cmd>w!<CR>", { desc = "Save" })
+keymap("n", "<leader>q", "<cmd>q!<CR>", { desc = "Quit" })
+keymap("n", "<leader>h", "<cmd>nohlsearch<CR>", { desc = "No Highlight" })
+keymap("n", "<leader>FH", "<cmd>History:<CR>", { desc = "Search command history" })
 
 -- Terminal --
 -- Better terminal navigation

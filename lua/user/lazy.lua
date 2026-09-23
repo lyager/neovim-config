@@ -112,15 +112,6 @@ require("lazy").setup({
         end,
     },
 
-    -- Which-key
-    {
-        "folke/which-key.nvim",
-        event = "VeryLazy",
-        config = function()
-            require("user.whichkey")
-        end,
-    },
-
     -- Colorschemes
     { "SyedFasiuddin/theme-toggle-nvim", lazy = true },
     { "folke/tokyonight.nvim",           lazy = true },
@@ -199,6 +190,9 @@ require("lazy").setup({
         "mrcjkb/rustaceanvim",
         version = "^8",
         lazy = false,
+        keys = {
+            { "<leader>lF", "<cmd>RustFeatures<cr>", desc = "Cargo Features" },
+        },
         init = function()
             local function find_cross_toml(dir)
                 return vim.fs.find("Cross.toml", { upward = true, path = dir })[1]
@@ -277,10 +271,31 @@ require("lazy").setup({
         tag = "0.1.8",
         cmd = "Telescope",
         keys = {
-            { "<leader>f",  desc = "Telescope" },
-            { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
-            { "<leader>fg", "<cmd>Telescope egrepify<cr>",   desc = "Live Grep" },
-            { "<leader>fb", "<cmd>Telescope buffers<cr>",    desc = "Buffers" },
+            { "<leader>f",  "<cmd>Telescope find_files<cr>",                                  desc = "Find Files" },
+            { "<leader>ff", "<cmd>Telescope find_files<cr>",                                  desc = "Find Files" },
+            { "<leader>fg", "<cmd>Telescope egrepify<cr>",                                    desc = "Live Grep" },
+            { "<leader>fb", "<cmd>Telescope buffers<cr>",                                     desc = "Buffers" },
+            { "<leader>F",  "<cmd>Telescope egrepify theme=ivy<cr>",                          desc = "Find Text" },
+            { "<leader>b",  "<cmd>Telescope buffers theme=dropdown previewer=false<cr>",      desc = "Buffers" },
+            { "<leader>P",  "<cmd>Telescope projects<cr>",                                    desc = "Projects" },
+            -- Git
+            { "<leader>gb", "<cmd>Telescope git_branches<cr>",                                desc = "Checkout branch" },
+            { "<leader>gc", "<cmd>Telescope git_commits<cr>",                                 desc = "Checkout commit" },
+            { "<leader>go", "<cmd>Telescope git_status<cr>",                                  desc = "Open changed file" },
+            -- LSP
+            { "<leader>ls", "<cmd>Telescope lsp_document_symbols<cr>",                        desc = "Document Symbols" },
+            { "<leader>lS", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",               desc = "Workspace Symbols" },
+            { "<leader>ld", "<cmd>Telescope diagnostics bufnr=0<cr>",                         desc = "Document Diagnostics" },
+            { "<leader>lw", "<cmd>Telescope diagnostics<cr>",                                 desc = "Workspace Diagnostics" },
+            -- Search
+            { "<leader>sC", "<cmd>Telescope commands<cr>",                                    desc = "Commands" },
+            { "<leader>sM", "<cmd>Telescope man_pages<cr>",                                   desc = "Man Pages" },
+            { "<leader>sR", "<cmd>Telescope registers<cr>",                                   desc = "Registers" },
+            { "<leader>sb", "<cmd>Telescope git_branches<cr>",                                desc = "Checkout branch" },
+            { "<leader>sc", "<cmd>Telescope colorscheme<cr>",                                 desc = "Colorscheme" },
+            { "<leader>sh", "<cmd>Telescope help_tags<cr>",                                   desc = "Find Help" },
+            { "<leader>sk", "<cmd>Telescope keymaps<cr>",                                     desc = "Keymaps" },
+            { "<leader>sr", "<cmd>Telescope oldfiles<cr>",                                    desc = "Open Recent File" },
         },
         dependencies = {
             "nvim-lua/plenary.nvim",
@@ -322,6 +337,17 @@ require("lazy").setup({
     {
         "lewis6991/gitsigns.nvim",
         event = { "BufReadPre", "BufNewFile" },
+        keys = {
+            { "<leader>gj", "<cmd>Gitsigns nav_hunk next<cr>",  desc = "Next Hunk" },
+            { "<leader>gk", "<cmd>Gitsigns nav_hunk prev<cr>",  desc = "Prev Hunk" },
+            { "<leader>gp", "<cmd>Gitsigns preview_hunk<cr>",   desc = "Preview Hunk" },
+            { "<leader>gs", "<cmd>Gitsigns stage_hunk<cr>",     desc = "Stage Hunk" },
+            { "<leader>gu", "<cmd>Gitsigns undo_stage_hunk<cr>", desc = "Undo Stage Hunk" },
+            { "<leader>gr", "<cmd>Gitsigns reset_hunk<cr>",     desc = "Reset Hunk" },
+            { "<leader>gR", "<cmd>Gitsigns reset_buffer<cr>",   desc = "Reset Buffer" },
+            { "<leader>gl", "<cmd>Gitsigns blame_line<cr>",     desc = "Blame" },
+            { "<leader>gd", "<cmd>Gitsigns diffthis HEAD<cr>",  desc = "Diff" },
+        },
         config = function()
             require("user.gitsigns")
         end,

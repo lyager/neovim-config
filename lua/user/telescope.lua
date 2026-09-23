@@ -49,10 +49,7 @@ telescope.setup({
             },
 
             n = {
-                -- Esc only leaves insert mode; close with <C-c> (or q below).
-                ["<esc>"] = false,
-                ["q"] = actions.close,
-                ["<C-c>"] = actions.close,
+                ["<esc>"] = actions.close,
                 ["<CR>"] = actions.select_default,
                 ["<C-x>"] = actions.select_horizontal,
                 ["<C-v>"] = actions.select_vertical,
@@ -112,8 +109,6 @@ telescope.setup({
         file_browser = {
             hijack_netrw = true,
             grouped = true,
-            -- Recurse (via fd) as soon as the prompt is non-empty.
-            auto_depth = true,
             hidden = { file_browser = true, folder_browser = true },
         },
     },

@@ -112,6 +112,21 @@ require("lazy").setup({
         end,
     },
 
+    -- Which-key: popup built from existing keymap descriptions; only group names are declared here.
+    {
+        "folke/which-key.nvim",
+        event = "VeryLazy",
+        opts = {
+            spec = {
+                { "<leader>f", group = "Find" },
+                { "<leader>g", group = "Git" },
+                { "<leader>l", group = "LSP" },
+                { "<leader>s", group = "Search" },
+                { "gr",        group = "LSP" }, -- Neovim 0.11 built-ins: grr grn gra gri grt
+            },
+        },
+    },
+
     -- Colorschemes
     { "SyedFasiuddin/theme-toggle-nvim", lazy = true },
     { "folke/tokyonight.nvim",           lazy = true },

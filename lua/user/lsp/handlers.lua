@@ -51,7 +51,6 @@ local function lsp_keymaps(bufnr)
     local keymap = vim.keymap.set
     keymap("n", "gD", vim.lsp.buf.declaration, opt("Goto declaration"))
     keymap("n", "<leader>li", "<cmd>LspInfo<cr>", opt("LSP Info"))
-    keymap("n", "<leader>lI", "<cmd>LspInstallInfo<cr>", opt("Installer Info"))
     keymap("n", "<leader>lq", vim.diagnostic.setloclist, opt("Quickfix"))
     keymap("n", "<leader>ll", vim.lsp.codelens.run, opt("CodeLens Action"))
 end

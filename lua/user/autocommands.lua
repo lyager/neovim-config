@@ -33,6 +33,27 @@ vim.cmd([[
 
 ]])
 
+-- Open telescope-file-browser when a buffer is a directory (`:e dir`, `:e %:h`,
+-- `nvim .`). Lives here rather than in the telescope config so it is active
+-- before telescope has lazy-loaded; the require() below triggers the load.
+vim.api.nvim_create_autocmd("BufEnter", {
+    group = vim.api.nvim_create_augroup("DirectoryBrowser", { clear = true }),
+    callback = function(args)
+        local dir = vim.api.nvim_buf_get_name(args.buf)
+        if vim.fn.isdirectory(dir) == 0 then
+            return
+        end
+        vim.schedule(function()
+            if vim.api.nvim_get_current_buf() ~= args.buf then
+                return
+            end
+            vim.bo[args.buf].bufhidden = "wipe"
+            require("telescope").extensions.file_browser.file_browser({ path = dir, cwd = dir })
+        end)
+    end,
+    desc = "telescope-file-browser replacement for netrw",
+})
+
 -- Autoformat on write (with toggle support)
 -- Use :FormatDisable to disable, :FormatEnable to re-enable, :FormatToggle to toggle
 -- Use :FormatDisable! to disable only for the current buffer

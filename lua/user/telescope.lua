@@ -106,15 +106,7 @@ telescope.setup({
                 },
             },
         },
-        file_browser = {
-            -- Directory buffers (`:e dir`, `:e %:h`) are handled by the autocmd in
-            -- user/autocommands.lua; the plugin's own hijack_netrw skips the picker
-            -- whenever the alternate file lives in the directory being opened.
-            grouped = true,
-            hidden = { file_browser = true, folder_browser = true },
-        },
     },
 })
 
 telescope.load_extension("egrepify")
-telescope.load_extension("file_browser")
